@@ -58,6 +58,7 @@ public:
 	spTrackEntry* setAnimation (int trackIndex, const std::string& name, bool loop);
 	spTrackEntry* addAnimation (int trackIndex, const std::string& name, bool loop, float delay = 0);
 	spTrackEntry* getCurrent (int trackIndex = 0);
+    std::string currentAnimation();
 	void clearTracks ();
 	void clearTrack (int trackIndex = 0);
 

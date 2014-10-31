@@ -160,6 +160,14 @@ spTrackEntry* SkeletonAnimation::addAnimation (int trackIndex, const std::string
 	}
 	return spAnimationState_addAnimation(_state, trackIndex, animation, loop, delay);
 }
+    
+std::string SkeletonAnimation::currentAnimation() {
+    auto trackEntry = this->getCurrent();
+    if (trackEntry) {
+        return trackEntry->animation->name;
+    }
+    return "";
+}
 
 spTrackEntry* SkeletonAnimation::getCurrent (int trackIndex) { 
 	return spAnimationState_getCurrent(_state, trackIndex);

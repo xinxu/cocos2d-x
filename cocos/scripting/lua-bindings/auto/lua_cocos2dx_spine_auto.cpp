@@ -1276,6 +1276,50 @@ int lua_cocos2dx_spine_SkeletonAnimation_clearTrack(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_spine_SkeletonAnimation_currentAnimation(lua_State* tolua_S)
+{
+    int argc = 0;
+    spine::SkeletonAnimation* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_spine_SkeletonAnimation_currentAnimation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        std::string ret = cobj->currentAnimation();
+        tolua_pushcppstring(tolua_S,ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAnimation:currentAnimation",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_spine_SkeletonAnimation_currentAnimation'.",&tolua_err);
+#endif
+
+    return 0;
+}
 static int lua_cocos2dx_spine_SkeletonAnimation_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (SkeletonAnimation)");
@@ -1299,6 +1343,7 @@ int lua_register_cocos2dx_spine_SkeletonAnimation(lua_State* tolua_S)
         tolua_function(tolua_S,"setEndListener",lua_cocos2dx_spine_SkeletonAnimation_setEndListener);
         tolua_function(tolua_S,"clearTracks",lua_cocos2dx_spine_SkeletonAnimation_clearTracks);
         tolua_function(tolua_S,"clearTrack",lua_cocos2dx_spine_SkeletonAnimation_clearTrack);
+        tolua_function(tolua_S,"currentAnimation",lua_cocos2dx_spine_SkeletonAnimation_currentAnimation);
     tolua_endmodule(tolua_S);
     std::string typeName = typeid(spine::SkeletonAnimation).name();
     g_luaType[typeName] = "sp.SkeletonAnimation";
