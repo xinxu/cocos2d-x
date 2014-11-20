@@ -133,12 +133,12 @@ xcopy /Y /Q "$(ProjectDir)..\..\external\chipmunk\prebuilt\win32\debug-lib\*.*" 
     </PreBuildEvent>
     <ClCompile>
       <AdditionalIncludeDirectories>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\include;$(EngineRoot)external\sqlite3\include;$(EngineRoot)external\unzip;$(EngineRoot)external\edtaa3func;$(EngineRoot)external\tinyxml2;$(EngineRoot)external\png\include\win32;$(EngineRoot)external\jpeg\include\win32;$(EngineRoot)external\tiff\include\win32;$(EngineRoot)external\webp\include\win32;$(EngineRoot)external\freetype2\include\win32;$(EngineRoot)external\win32-specific\MP3Decoder\include;$(EngineRoot)external\win32-specific\OggDecoder\include;$(EngineRoot)external\win32-specific\OpenalSoft\include;$(EngineRoot)external\win32-specific\icon\include;$(EngineRoot)external\win32-specific\zlib\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)external\xxhash;$(EngineRoot)external\ConvertUTF;$(EngineRoot)external\Box2d;$(EngineRoot)external\curl\include\win32;$(EngineRoot)external\websockets\include\win32\;$(EngineRoot)external\protobuf-lite\win32;$(EngineRoot)external\protobuf-lite\src;$(EngineRoot)external;$(EngineRoot)cocos;$(EngineRoot)cocos\editor-support;$(EngineRoot)cocos\audio\include;$(EngineRoot)extensions;$(EngineRoot);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_USRDLL;NDEBUG;_WINDOWS;_LIB;COCOS2DXWIN32_EXPORTS;GL_GLEXT_PROTOTYPES;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_USE3DDLL;_EXPORT_DLL_;_USRSTUDIODLL;_USREXDLL;_USEGUIDLL;CC_ENABLE_CHIPMUNK_INTEGRATION=1;PROTOBUF_USE_DLLS;LIBPROTOBUF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_LIB;COCOS2DXWIN32_EXPORTS;_USRDLL;GL_GLEXT_PROTOTYPES;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_USE3DDLL;_EXPORT_DLL_;_USRSTUDIODLL;_USREXDLL;_USEGUIDLL;CC_ENABLE_CHIPMUNK_INTEGRATION=1;PROTOBUF_USE_DLLS;LIBPROTOBUF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -146,24 +146,8 @@ xcopy /Y /Q "$(ProjectDir)..\..\external\chipmunk\prebuilt\win32\debug-lib\*.*" 
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <PreLinkEvent>
-      <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\freetype2\prebuilt\win32\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\glfw3\prebuilt\win32\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\curl\prebuilt\win32\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\jpeg\prebuilt\win32\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\png\prebuilt\win32\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\tiff\prebuilt\win32\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\webp\prebuilt\win32\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\websockets\prebuilt\win32\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\win32-specific\zlib\prebuilt\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\win32-specific\icon\prebuilt\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\win32-specific\gles\prebuilt\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\win32-specific\OpenalSoft\prebuilt\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\win32-specific\MP3Decoder\prebuilt\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\win32-specific\OggDecoder\prebuilt\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\sqlite3\libraries\win32\*.*" "$(OutDir)"
-xcopy /Y /Q "$(ProjectDir)..\..\external\chipmunk\prebuilt\win32\release-lib\*.*" "$(OutDir)"
-</Command>
+      <Command>
+      </Command>
     </PreLinkEvent>
     <Link>
       <AdditionalDependencies>sqlite3.lib;libcurl_imp.lib;websockets.lib;libmpg123.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
