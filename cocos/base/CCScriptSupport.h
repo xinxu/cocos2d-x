@@ -97,7 +97,7 @@ public:
      * @js NA
      * @lua NA
      */
-    static SchedulerScriptHandlerEntry* create(int handler, float interval, bool paused);
+    static SchedulerScriptHandlerEntry* create(int handler, float interval, unsigned int repeat, float delay, bool paused);
     /**
      * @js NA
      * @lua NA
@@ -140,7 +140,7 @@ private:
     , _markedForDeletion(false)
     {
     }
-    bool init(float interval, bool paused);
+    bool init(float interval, unsigned int repeat, float delay, bool paused);
     
     TimerScriptHandler*   _timer;
     bool                _paused;

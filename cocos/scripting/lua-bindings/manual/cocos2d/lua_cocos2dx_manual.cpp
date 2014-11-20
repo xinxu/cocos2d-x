@@ -1653,19 +1653,29 @@ static int tolua_cocos2d_Scheduler_scheduleScriptFunc(lua_State* tolua_S)
 #endif
     
     argc = lua_gettop(tolua_S) - 1;
-    if (3 == argc) {
+    if (5 == argc) {
 #if COCOS2D_DEBUG >= 1
         if (!toluafix_isfunction(tolua_S,2,"LUA_FUNCTION",0,&tolua_err) ||
             !tolua_isnumber(tolua_S,3,0,&tolua_err) ||
-            !tolua_isboolean(tolua_S,4,0,&tolua_err))
+            !tolua_isnumber(tolua_S, 4, 0, &tolua_err) ||
+            !tolua_isnumber(tolua_S, 5, 0, &tolua_err) ||
+            !tolua_isboolean(tolua_S,6,0,&tolua_err))
         {
             goto tolua_lerror;
         }
 #endif
         LUA_FUNCTION handler =  toluafix_ref_function(tolua_S,2,0);
         float interval = (float)  tolua_tonumber(tolua_S,3,0);
-        bool  paused   = (bool)  tolua_toboolean(tolua_S,4,0);
-        unsigned int tolua_ret = (unsigned int)  self->scheduleScriptFunc(handler,interval,paused);
+        unsigned int repeat = 0;
+        int value = (int) tolua_tonumber(tolua_S, 4, 0);
+        if (value < 0) {
+            repeat = CC_REPEAT_FOREVER;
+        } else {
+            repeat = value;
+        }
+        float delay = (float) tolua_tonumber(tolua_S, 5, 0);
+        bool  paused   = (bool)  tolua_toboolean(tolua_S,6,0);
+        unsigned int tolua_ret = (unsigned int)  self->scheduleScriptFunc(handler,interval, repeat, delay ,paused);
         tolua_pushnumber(tolua_S,(lua_Number)tolua_ret);
         return 1;
     }
