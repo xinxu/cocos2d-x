@@ -90,6 +90,8 @@ public:
      */
     void setItemModel(Widget* model);
     
+    Widget *getItemModel() { return _model; }
+    
     /**
      * Push back a default item(create by a cloned model) into listview.
      */
