@@ -71,7 +71,7 @@ public:
 	void setTrackEndListener (spTrackEntry* entry, const EndListener& listener);
 	void setTrackCompleteListener (spTrackEntry* entry, const CompleteListener& listener);
 	void setTrackEventListener (spTrackEntry* entry, const EventListener& listener);
-
+    
 	virtual void onAnimationStateEvent (int trackIndex, spEventType type, spEvent* event, int loopCount);
 	virtual void onTrackEntryEvent (int trackIndex, spEventType type, spEvent* event, int loopCount);
 
