@@ -308,6 +308,7 @@ void TMXMapInfo::startElement(void *ctx, const char *name, const char **atts)
             tmxMapInfo->getTilesets().pushBack(tileset);
             tileset->release();
         }
+        tmxMapInfo->setParentElement(TMXPropertyTileset);
     }
     else if (elementName == "tile")
     {
@@ -389,7 +390,7 @@ void TMXMapInfo::startElement(void *ctx, const char *name, const char **atts)
             sourceImage = _resources + (_resources.size() ? "/" : "") + imagename;
         }
         
-        if (tmxMapInfo->getParentElement() == TMXPropertyMap) {
+        if (tmxMapInfo->getParentElement() == TMXPropertyTileset) {
             TMXTilesetInfo* tileset = tmxMapInfo->getTilesets().back();
             tileset->_sourceImage = sourceImage;
         } else if (tmxMapInfo->getParentElement() == TMXPropertyTile) {
@@ -698,7 +699,12 @@ void TMXMapInfo::endElement(void *ctx, const char *name)
     }
     else if (elementName == "tileset")
     {
+        tmxMapInfo->setParentElement(TMXPropertyNone);
         _recordFirstGID = true;
+    }
+    else if (elementName == "tile")
+    {
+        tmxMapInfo->setParentElement(TMXPropertyNone);
     }
 }
 
