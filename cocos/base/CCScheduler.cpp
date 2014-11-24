@@ -211,11 +211,11 @@ void TimerTargetCallback::cancel()
 
 // TimerScriptHandler
 
-bool TimerScriptHandler::initWithScriptHandler(int handler, float seconds)
+bool TimerScriptHandler::initWithScriptHandler(int handler, float seconds, unsigned int repeat, float delay)
 {
     _scriptHandler = handler;
     _elapsed = -1;
-    _interval = seconds;
+    setupTimerWithInterval(seconds, repeat, delay);
     
     return true;
 }
@@ -669,9 +669,9 @@ void Scheduler::unscheduleAllForTarget(void *target)
 }
 
 #if CC_ENABLE_SCRIPT_BINDING
-unsigned int Scheduler::scheduleScriptFunc(unsigned int handler, float interval, bool paused)
+unsigned int Scheduler::scheduleScriptFunc(unsigned int handler, float interval, unsigned int repeat, float delay, bool paused)
 {
-    SchedulerScriptHandlerEntry* entry = SchedulerScriptHandlerEntry::create(handler, interval, paused);
+    SchedulerScriptHandlerEntry* entry = SchedulerScriptHandlerEntry::create(handler, interval, repeat, delay, paused);
     _scriptHandlerEntries.pushBack(entry);
     return entry->getEntryId();
 }

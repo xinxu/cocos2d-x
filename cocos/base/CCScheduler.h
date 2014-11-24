@@ -130,7 +130,7 @@ protected:
 class CC_DLL TimerScriptHandler : public Timer
 {
 public:
-    bool initWithScriptHandler(int handler, float seconds);
+    bool initWithScriptHandler(int handler, float seconds, unsigned int repeat, float delay);
     inline int getScriptHandler() const { return _scriptHandler; };
     
     virtual void trigger() override;
@@ -255,7 +255,7 @@ public:
      If 'interval' is 0, it will be called every frame.
      return schedule script entry ID, used for unscheduleScriptFunc().
      */
-    unsigned int scheduleScriptFunc(unsigned int handler, float interval, bool paused);
+    unsigned int scheduleScriptFunc(unsigned int handler, float interval, unsigned int repeat, float delay, bool paused);
 #endif
     /////////////////////////////////////
     
