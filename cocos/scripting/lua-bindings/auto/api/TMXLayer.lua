@@ -1,8 +1,8 @@
 
 --------------------------------
 -- @module TMXLayer
--- @extend Node
--- @parent_module ccexp
+-- @extend SpriteBatchNode
+-- @parent_module cc
 
 --------------------------------
 --  returns the position in points of a given tile coordinate 
@@ -16,6 +16,13 @@
 -- @function [parent=#TMXLayer] setLayerOrientation 
 -- @param self
 -- @param #int orientation
+        
+--------------------------------
+--  dealloc the map that contains the tile position from memory.<br>
+-- Unless you want to know at runtime the tiles positions, you can safely call this method.<br>
+-- If you are going to call layer->tileGIDAt() then, don't release the map
+-- @function [parent=#TMXLayer] releaseMap 
+-- @param self
         
 --------------------------------
 --  size of the layer in tiles 
@@ -54,31 +61,25 @@
 -- @param #vec2_table tileCoordinate
         
 --------------------------------
--- @overload self         
--- @overload self         
--- @function [parent=#TMXLayer] getProperties
+--  initializes a TMXLayer with a tileset info, a layer info and a map info 
+-- @function [parent=#TMXLayer] initWithTilesetInfo 
 -- @param self
--- @return map_table#map_table ret (return value: map_table)
-
+-- @param #cc.TMXTilesetInfo tilesetInfo
+-- @param #cc.TMXLayerInfo layerInfo
+-- @param #cc.TMXMapInfo mapInfo
+-- @return bool#bool ret (return value: bool)
+        
 --------------------------------
 --  Creates the tiles 
 -- @function [parent=#TMXLayer] setupTiles 
 -- @param self
         
 --------------------------------
--- 
--- @function [parent=#TMXLayer] setupTileSprite 
--- @param self
--- @param #cc.Sprite sprite
--- @param #vec2_table pos
--- @param #int gid
-        
---------------------------------
--- @overload self, int, vec2_table, int         
--- @overload self, int, vec2_table         
+-- @overload self, unsigned int, vec2_table, int         
+-- @overload self, unsigned int, vec2_table         
 -- @function [parent=#TMXLayer] setTileGID
 -- @param self
--- @param #int gid
+-- @param #unsigned int gid
 -- @param #vec2_table tileCoordinate
 -- @param #int flags
 
@@ -120,24 +121,46 @@
 -- @return TMXTilesetInfo#TMXTilesetInfo ret (return value: cc.TMXTilesetInfo)
         
 --------------------------------
+-- @overload self         
+-- @overload self         
+-- @function [parent=#TMXLayer] getProperties
+-- @param self
+-- @return map_table#map_table ret (return value: map_table)
+
+--------------------------------
 --  returns the tile (Sprite) at a given a tile coordinate.<br>
 -- The returned Sprite will be already added to the TMXLayer. Don't add it again.<br>
 -- The Sprite can be treated like any other Sprite: rotated, scaled, translated, opacity, color, etc.<br>
 -- You can remove either by calling:<br>
--- - layer->removeChild(sprite, cleanup);
+-- - layer->removeChild(sprite, cleanup);<br>
+-- - or layer->removeTileAt(Vec2(x,y));
 -- @function [parent=#TMXLayer] getTileAt 
 -- @param self
 -- @param #vec2_table tileCoordinate
 -- @return Sprite#Sprite ret (return value: cc.Sprite)
         
 --------------------------------
---  creates a FastTMXLayer with an tileset info, a layer info and a map info 
+--  creates a TMXLayer with an tileset info, a layer info and a map info 
 -- @function [parent=#TMXLayer] create 
 -- @param self
 -- @param #cc.TMXTilesetInfo tilesetInfo
 -- @param #cc.TMXLayerInfo layerInfo
 -- @param #cc.TMXMapInfo mapInfo
--- @return experimental::TMXLayer#experimental::TMXLayer ret (return value: cc.experimental::TMXLayer)
+-- @return TMXLayer#TMXLayer ret (return value: cc.TMXLayer)
+        
+--------------------------------
+-- 
+-- @function [parent=#TMXLayer] addChild 
+-- @param self
+-- @param #cc.Node child
+-- @param #int zOrder
+-- @param #int tag
+        
+--------------------------------
+-- 
+-- @function [parent=#TMXLayer] getDescription 
+-- @param self
+-- @return string#string ret (return value: string)
         
 --------------------------------
 -- 
@@ -145,20 +168,6 @@
 -- @param self
 -- @param #cc.Node child
 -- @param #bool cleanup
-        
---------------------------------
--- 
--- @function [parent=#TMXLayer] draw 
--- @param self
--- @param #cc.Renderer renderer
--- @param #mat4_table transform
--- @param #unsigned int flags
-        
---------------------------------
--- 
--- @function [parent=#TMXLayer] getDescription 
--- @param self
--- @return string#string ret (return value: string)
         
 --------------------------------
 -- js ctor

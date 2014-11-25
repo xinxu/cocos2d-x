@@ -44,12 +44,11 @@
 -- @return string#string ret (return value: string)
         
 --------------------------------
---  Output to CCLOG the current contents of this TextureCache<br>
--- This will attempt to calculate the size of each texture, and the total texture memory in use<br>
--- since v1.0
--- @function [parent=#TextureCache] getCachedTextureInfo 
+-- 
+-- @function [parent=#TextureCache] addTexture 
 -- @param self
--- @return string#string ret (return value: string)
+-- @param #cc.Texture2D tex
+-- @param #string key
         
 --------------------------------
 -- @overload self, cc.Image, string         
@@ -81,6 +80,14 @@
 -- since v0.8
 -- @function [parent=#TextureCache] removeUnusedTextures 
 -- @param self
+        
+--------------------------------
+--  Output to CCLOG the current contents of this TextureCache<br>
+-- This will attempt to calculate the size of each texture, and the total texture memory in use<br>
+-- since v1.0
+-- @function [parent=#TextureCache] getCachedTextureInfo 
+-- @param self
+-- @return string#string ret (return value: string)
         
 --------------------------------
 --  Deletes a texture from the cache given a texture
