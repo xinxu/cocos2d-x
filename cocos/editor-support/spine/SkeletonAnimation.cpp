@@ -96,6 +96,7 @@ void SkeletonAnimation::initialize () {
 
 	_spAnimationState* stateInternal = (_spAnimationState*)_state;
 	stateInternal->disposeTrackEntry = disposeTrackEntry;
+	spSkeleton_updateWorldTransform(_skeleton);
 }
 
 SkeletonAnimation::SkeletonAnimation (spSkeletonData *skeletonData) :
