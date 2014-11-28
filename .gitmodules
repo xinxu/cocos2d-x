@@ -6,7 +6,7 @@
         url = https://github.com/cocos2d-x/plugin-x.git
 [submodule "tools/bindings-generator"]
         path = tools/bindings-generator
-        url = https://github.com/cocos2d/bindings-generator.git
+        url = git@github.com:xinxu/bindings-generator.git
 [submodule "tests/cpp-tests/Resources/ccs-res"]
         path = tests/cpp-tests/Resources/ccs-res
         url = https://github.com/dumganhar/ccs-res.git
