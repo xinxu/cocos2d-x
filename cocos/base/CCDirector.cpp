@@ -328,6 +328,7 @@ void Director::calculateDeltaTime()
     if (gettimeofday(&now, nullptr) != 0)
     {
         CCLOG("error in gettimeofday");
+		_real_deltaTime = 0; //WeiYuemin
         _deltaTime = 0;
         return;
     }
@@ -344,13 +345,15 @@ void Director::calculateDeltaTime()
         _deltaTime = MAX(0, _deltaTime);
     }
 
-#if COCOS2D_DEBUG
+	//modified by WeiYuemin: constant deltaTime
+//#if COCOS2D_DEBUG
     // If we are debugging our code, prevent big delta time
-    if (_deltaTime > 0.2f)
+    //if (_deltaTime > 0.2f)
     {
+		_real_deltaTime = _deltaTime;
         _deltaTime = 1 / 60.0f;
     }
-#endif
+//#endif
 
     *_lastUpdate = now;
 }
@@ -1086,7 +1089,7 @@ void Director::showStats()
     static unsigned long prevVerts = 0;
 
     ++_frames;
-    _accumDt += _deltaTime;
+	_accumDt += _real_deltaTime;
     
     if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
     {

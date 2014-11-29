@@ -434,7 +434,8 @@ protected:
     EventCustom *_eventProjectionChanged, *_eventAfterDraw, *_eventAfterVisit, *_eventAfterUpdate;
         
     /* delta time since last tick to main loop */
-	float _deltaTime;
+	float _deltaTime; //modified by WeiYuemin: I set this to fixed
+	float _real_deltaTime; //this is not fixed
     
     /* The _openGLView, where everything is rendered, GLView is a abstract class,cocos2d-x provide GLViewImpl
      which inherit from it as default renderer context,you can have your own by inherit from it*/
