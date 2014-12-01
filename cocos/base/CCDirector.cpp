@@ -351,7 +351,7 @@ void Director::calculateDeltaTime()
     //if (_deltaTime > 0.2f)
     {
 		_real_deltaTime = _deltaTime;
-        _deltaTime = 1 / 60.0f;
+		_deltaTime = _animationInterval;
     }
 //#endif
 
