@@ -60,6 +60,9 @@ THE SOFTWARE.
 #include "platform/CCApplication.h"
 //#include "platform/CCGLViewImpl.h"
 
+//statistics
+#include "Statistics.h"
+
 /**
  Position of the FPS
  
@@ -248,6 +251,14 @@ void Director::setGLDefaultValues()
 void Director::drawScene()
 {
     // calculate "global" dt
+//    static int i = 0;
+//    i++;
+//    if( i == 100 ) {
+//        printf( "100 frames' statistics data:\n" );
+//        Statistics::getInstance()->printAll();
+//        Statistics::getInstance()->clearAll();
+//        i = 0;
+//    }
     calculateDeltaTime();
     
     // skip one flame when _deltaTime equal to zero.
@@ -264,8 +275,13 @@ void Director::drawScene()
     //tick before glClear: issue #533
     if (! _paused)
     {
+        //Statistics::getInstance()->start();
         _scheduler->update(_deltaTime);
+        //Statistics::getInstance()->end( "update" );
+        
+        //Statistics::getInstance()->start();
         _eventDispatcher->dispatchEvent(_eventAfterUpdate);
+        //Statistics::getInstance()->end( "dispatch event after update" );
     }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -286,7 +302,9 @@ void Director::drawScene()
         _renderer->clearDrawStats();
         
         //render the scene
+        //Statistics::getInstance()->start();
         _runningScene->render(_renderer);
+        //Statistics::getInstance()->end( "render running scene" );
         
         _eventDispatcher->dispatchEvent(_eventAfterVisit);
     }
@@ -301,8 +319,9 @@ void Director::drawScene()
     {
         showStats();
     }
+    
     _renderer->render();
-
+    
     _eventDispatcher->dispatchEvent(_eventAfterDraw);
 
     popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
