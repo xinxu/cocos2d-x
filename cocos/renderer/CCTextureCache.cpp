@@ -408,7 +408,6 @@ void TextureCache::addTexture(Texture2D* tex, const std::string& key) {
     do {
         _textures.insert(std::make_pair(key, tex));
         tex->retain();
-        tex->autorelease();
         
         auto it = _textures.find(key);
         if( it != _textures.end() ) {
