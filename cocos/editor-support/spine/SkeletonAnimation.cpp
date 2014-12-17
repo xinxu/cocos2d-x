@@ -126,8 +126,8 @@ void SkeletonAnimation::update (float deltaTime) {
 
 	deltaTime *= _timeScale;
 	spAnimationState_update(_state, deltaTime);
-	spAnimationState_apply(_state, _skeleton);
 	spSkeleton_updateWorldTransform(_skeleton);
+	spAnimationState_apply(_state, _skeleton);
 }
 
 void SkeletonAnimation::setAnimationStateData (spAnimationStateData* stateData) {
