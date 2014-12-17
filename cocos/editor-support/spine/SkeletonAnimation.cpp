@@ -99,18 +99,20 @@ void SkeletonAnimation::initialize () {
 	spSkeleton_updateWorldTransform(_skeleton);
 }
 
-SkeletonAnimation::SkeletonAnimation (spSkeletonData *skeletonData)
-		: SkeletonRenderer(skeletonData) {
+SkeletonAnimation::SkeletonAnimation (spSkeletonData *skeletonData) :
+    SkeletonRenderer(skeletonData)
+
+{
 	initialize();
 }
 
-SkeletonAnimation::SkeletonAnimation (const std::string& skeletonDataFile, spAtlas* atlas, float scale)
-		: SkeletonRenderer(skeletonDataFile, atlas, scale) {
+SkeletonAnimation::SkeletonAnimation (const std::string& skeletonDataFile, spAtlas* atlas, float scale) :
+    SkeletonRenderer(skeletonDataFile, atlas, scale) {
 	initialize();
 }
 
-SkeletonAnimation::SkeletonAnimation (const std::string& skeletonDataFile, const std::string& atlasFile, float scale)
-		: SkeletonRenderer(skeletonDataFile, atlasFile, scale) {
+SkeletonAnimation::SkeletonAnimation (const std::string& skeletonDataFile, const std::string& atlasFile, float scale) :
+    SkeletonRenderer(skeletonDataFile, atlasFile, scale) {
 	initialize();
 }
 
@@ -124,8 +126,8 @@ void SkeletonAnimation::update (float deltaTime) {
 
 	deltaTime *= _timeScale;
 	spAnimationState_update(_state, deltaTime);
-	spAnimationState_apply(_state, _skeleton);
 	spSkeleton_updateWorldTransform(_skeleton);
+	spAnimationState_apply(_state, _skeleton);
 }
 
 void SkeletonAnimation::setAnimationStateData (spAnimationStateData* stateData) {
@@ -254,5 +256,5 @@ void SkeletonAnimation::setTrackEventListener (spTrackEntry* entry, const EventL
 spAnimationState* SkeletonAnimation::getState() const {
 	return _state;
 }
-
+    
 }
