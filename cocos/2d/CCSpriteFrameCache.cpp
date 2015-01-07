@@ -427,5 +427,13 @@ SpriteFrame* SpriteFrameCache::getSpriteFrameByName(const std::string& name)
     return frame;
 }
 
+// modify by tassar
+
+void SpriteFrameCache::addAliasForKey(const std::string& alias, const std::string& key) {
+    _spriteFramesAliases[alias] = Value(key);
+}
+
+// modify end
+
 NS_CC_END
 

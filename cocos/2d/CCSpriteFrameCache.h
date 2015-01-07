@@ -161,6 +161,10 @@ public:
 
     /** @deprecated use getSpriteFrameByName() instead */
     CC_DEPRECATED_ATTRIBUTE SpriteFrame* spriteFrameByName(const std::string&name) { return getSpriteFrameByName(name); }
+    
+    // modify by tassar
+    void addAliasForKey(const std::string& alias, const std::string& key);
+    // modify end
 
 private:
     /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
