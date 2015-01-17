@@ -464,7 +464,11 @@ void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void *target, 
 {
     tHashUpdateEntry *hashElement = nullptr;
     HASH_FIND_PTR(_hashForUpdates, &target, hashElement);
-    if (hashElement)
+	if (hashElement && !hashElement->entry->markedForDeletion) //modified by WeiYuemin
+	//如果这个hashElement已经被标记为删除的话，不能算找到了。
+	//就不执行修改，而是直接插入或者append。同样的值再add一遍似乎是不会出错
+	//但不在find里改有个隐患：hash里已经有两个一样的了，一个markedForDeletion，一个没有，那么其实应该find到第二个，但有可能find到第一个，结果因为markedForDeletion的缘故就相当于没有找到
+	//看了下，同bucket内，后插入的是在前面的，那么会先遍历到，应该会没问题
     {
         // check if priority has changed
         if ((*hashElement->list)->priority != priority)
@@ -484,6 +488,7 @@ void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void *target, 
         }
         else
         {
+			CCLOG("reschedule (%x). priority: %d", (long)target, priority);
             hashElement->entry->markedForDeletion = false;
             hashElement->entry->paused = paused;
             return;

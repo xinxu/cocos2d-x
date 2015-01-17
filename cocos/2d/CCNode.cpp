@@ -1334,6 +1334,7 @@ void Node::onEnter()
     
     this->resume();
     
+	//CCLOG("[%x]'s _running is set to true", (long)this);
     _running = true;
     
 #if CC_ENABLE_SCRIPT_BINDING
@@ -1524,7 +1525,7 @@ void Node::scheduleUpdateWithPriorityLua(int nHandler, int priority)
     _updateScriptHandler = nHandler;
 #endif
     
-	//CCLOG("scheduleUpdateLua: [%x] %d, %d", (long)this, nHandler, priority);
+	//CCLOG("scheduleUpdateLua: [%x] %d, %d, %d", (long)this, nHandler, priority, !_running);
     _scheduler->scheduleUpdate(this, priority, !_running);
 }
 
