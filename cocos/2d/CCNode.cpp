@@ -1524,6 +1524,7 @@ void Node::scheduleUpdateWithPriorityLua(int nHandler, int priority)
     _updateScriptHandler = nHandler;
 #endif
     
+	//CCLOG("scheduleUpdateLua: [%x] %d, %d", (long)this, nHandler, priority);
     _scheduler->scheduleUpdate(this, priority, !_running);
 }
 

@@ -69,12 +69,6 @@
 -- @return float#float ret (return value: float)
         
 --------------------------------
--- 
--- @function [parent=#ControlPotentiometer] getPreviousLocation 
--- @param self
--- @return vec2_table#vec2_table ret (return value: vec2_table)
-        
---------------------------------
 --  Returns the distance between the point1 and point2. 
 -- @function [parent=#ControlPotentiometer] distanceBetweenPointAndPoint 
 -- @param self
@@ -87,6 +81,12 @@
 -- @function [parent=#ControlPotentiometer] potentiometerEnded 
 -- @param self
 -- @param #vec2_table location
+        
+--------------------------------
+-- 
+-- @function [parent=#ControlPotentiometer] getPreviousLocation 
+-- @param self
+-- @return vec2_table#vec2_table ret (return value: vec2_table)
         
 --------------------------------
 -- 

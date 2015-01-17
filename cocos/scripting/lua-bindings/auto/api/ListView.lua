@@ -113,6 +113,12 @@
 -- @param self
         
 --------------------------------
+-- 
+-- @function [parent=#ListView] getItemModel 
+-- @param self
+-- @return Widget#Widget ret (return value: ccui.Widget)
+        
+--------------------------------
 -- Push back a default item(create by a cloned model) into listview.
 -- @function [parent=#ListView] pushBackDefaultItem 
 -- @param self

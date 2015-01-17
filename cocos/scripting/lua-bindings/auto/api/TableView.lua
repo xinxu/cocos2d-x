@@ -19,12 +19,6 @@
         
 --------------------------------
 -- 
--- @function [parent=#TableView] scrollViewDidZoom 
--- @param self
--- @param #cc.ScrollView view
-        
---------------------------------
--- 
 -- @function [parent=#TableView] _updateContentSize 
 -- @param self
         
@@ -59,6 +53,12 @@
 -- reloads data from data source.  the view will be refreshed.
 -- @function [parent=#TableView] reloadData 
 -- @param self
+        
+--------------------------------
+-- 
+-- @function [parent=#TableView] scrollViewDidZoom 
+-- @param self
+-- @param #cc.ScrollView view
         
 --------------------------------
 -- Inserts a new cell at a given index<br>

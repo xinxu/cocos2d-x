@@ -61,7 +61,7 @@ THE SOFTWARE.
 //#include "platform/CCGLViewImpl.h"
 
 //statistics
-#include "Statistics.h"
+//#include "Statistics.h"
 
 /**
  Position of the FPS

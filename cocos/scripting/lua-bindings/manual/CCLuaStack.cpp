@@ -844,7 +844,7 @@ int LuaStack::luaLoadBuffer(lua_State *L, const char *chunk, int chunkSize, cons
         r = luaL_loadbuffer(L, chunk, chunkSize, chunkName);
     }
     
-#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
+//#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
     if (r)
     {
         switch (r)
@@ -865,7 +865,7 @@ int LuaStack::luaLoadBuffer(lua_State *L, const char *chunk, int chunkSize, cons
                 CCLOG("[LUA ERROR] load \"%s\", error: unknown.", chunkName);
         }
     }
-#endif
+//#endif
     return r;
 }
 

@@ -445,7 +445,8 @@ void Scheduler::appendIn(_listEntry **list, const ccSchedulerFunc& callback, voi
     tListEntry *listElement = new tListEntry();
 
     listElement->callback = callback;
-    listElement->target = target;
+	listElement->target = target;
+	listElement->priority = 0; //WeiYuemin: when calling appendIn, the priority will always be zero
     listElement->paused = paused;
     listElement->markedForDeletion = false;
 
@@ -470,7 +471,7 @@ void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void *target, 
         {
             if (_updateHashLocked)
             {
-                CCLOG("warning: you CANNOT change update priority in scheduled function");
+				CCLOG("warning: you CANNOT change update priority in scheduled function. old_priority: %d, new_priority: %d", (*hashElement->list)->priority, priority);
                 hashElement->entry->markedForDeletion = false;
                 hashElement->entry->paused = paused;
                 return;
@@ -571,10 +572,12 @@ void Scheduler::unscheduleUpdate(void *target)
     {
         if (_updateHashLocked)
         {
+			//CCLOG("unscheduleUpdate [%x] but hash locked", (long)target);
             element->entry->markedForDeletion = true;
         }
         else
         {
+			//CCLOG("unscheduleUpdate [%x] and remove from hash", (long)target);
             this->removeUpdateFromHash(element->entry);
         }
     }
