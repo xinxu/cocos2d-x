@@ -40,8 +40,8 @@ NS_CC_BEGIN
 typedef struct _listEntry
 {
     struct _listEntry   *prev, *next;
-    ccSchedulerFunc     callback;
-    void                *target;
+	ccSchedulerFunc     callback;
+	void				*hash_key;
     int                 priority;
     bool                paused;
     bool                markedForDeletion; // selector will no longer be called and entry will be removed at end of the next tick
@@ -51,7 +51,7 @@ typedef struct _hashUpdateEntry
 {
     tListEntry          **list;        // Which list does it belong to ?
     tListEntry          *entry;        // entry in the list
-    void                *target;
+	void				*hash_key;
     ccSchedulerFunc     callback;
     UT_hash_handle      hh;
 } tHashUpdateEntry;
@@ -60,7 +60,7 @@ typedef struct _hashUpdateEntry
 typedef struct _hashSelectorEntry
 {
     ccArray             *timers;
-    void                *target;
+	void				*hash_key;
     int                 timerIndex;
     Timer               *currentTimer;
     bool                currentTimerSalvaged;
@@ -179,15 +179,15 @@ void TimerTargetSelector::cancel()
 // TimerTargetCallback
 
 TimerTargetCallback::TimerTargetCallback()
-: _target(nullptr)
+: _hash_key(nullptr)
 , _callback(nullptr)
 {
 }
 
-bool TimerTargetCallback::initWithCallback(Scheduler* scheduler, const ccSchedulerFunc& callback, void *target, const std::string& key, float seconds, unsigned int repeat, float delay)
+bool TimerTargetCallback::initWithCallback(Scheduler* scheduler, const ccSchedulerFunc& callback, void *hash_key, const std::string& key, float seconds, unsigned int repeat, float delay)
 {
     _scheduler = scheduler;
-    _target = target;
+	_hash_key = hash_key;
     _callback = callback;
     _key = key;
     setupTimerWithInterval(seconds, repeat, delay);
@@ -204,7 +204,7 @@ void TimerTargetCallback::trigger()
 
 void TimerTargetCallback::cancel()
 {
-    _scheduler->unschedule(_key, _target);
+    _scheduler->_unschedule(_key, _hash_key);
 }
 
 #if CC_ENABLE_SCRIPT_BINDING
@@ -275,25 +275,20 @@ void Scheduler::removeHashElement(_hashSelectorEntry *element)
     free(element);
 }
 
-void Scheduler::schedule(const ccSchedulerFunc& callback, void *target, float interval, bool paused, const std::string& key)
+void Scheduler::_schedule(const ccSchedulerFunc& callback, void *hash_key, float interval, unsigned int repeat, float delay, bool paused, const std::string& key)
 {
-    this->schedule(callback, target, interval, CC_REPEAT_FOREVER, 0.0f, paused, key);
-}
-
-void Scheduler::schedule(const ccSchedulerFunc& callback, void *target, float interval, unsigned int repeat, float delay, bool paused, const std::string& key)
-{
-    CCASSERT(target, "Argument target must be non-nullptr");
+	CCASSERT(hash_key, "Argument hash_key must be non-nullptr");
     CCASSERT(!key.empty(), "key should not be empty!");
 
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
 
     if (! element)
     {
         element = (tHashTimerEntry *)calloc(sizeof(*element), 1);
-        element->target = target;
+		element->hash_key = hash_key;
 
-        HASH_ADD_PTR(_hashForTimers, target, element);
+		HASH_ADD_PTR(_hashForTimers, hash_key, element);
 
         // Is this the 1st element ? Then set the pause level to all the selectors of this target
         element->paused = paused;
@@ -324,15 +319,15 @@ void Scheduler::schedule(const ccSchedulerFunc& callback, void *target, float in
     }
 
     TimerTargetCallback *timer = new (std::nothrow) TimerTargetCallback();
-    timer->initWithCallback(this, callback, target, key, interval, repeat, delay);
+	timer->initWithCallback(this, callback, hash_key, key, interval, repeat, delay);
     ccArrayAppendObject(element->timers, timer);
     timer->release();
 }
 
-void Scheduler::unschedule(const std::string &key, void *target)
+void Scheduler::_unschedule(const std::string &key, void *hash_key)
 {
     // explicity handle nil arguments when removing an object
-    if (target == nullptr || key.empty())
+	if (hash_key == nullptr || key.empty())
     {
         return;
     }
@@ -341,7 +336,7 @@ void Scheduler::unschedule(const std::string &key, void *target)
     //CCASSERT(selector);
 
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
 
     if (element)
     {
@@ -383,12 +378,12 @@ void Scheduler::unschedule(const std::string &key, void *target)
     }
 }
 
-void Scheduler::priorityIn(tListEntry **list, const ccSchedulerFunc& callback, void *target, int priority, bool paused)
+void Scheduler::priorityIn(tListEntry **list, const ccSchedulerFunc& callback, void *hash_key, int priority, bool paused)
 {
     tListEntry *listElement = new tListEntry();
 
     listElement->callback = callback;
-    listElement->target = target;
+	listElement->hash_key = hash_key;
     listElement->priority = priority;
     listElement->paused = paused;
     listElement->next = listElement->prev = nullptr;
@@ -434,18 +429,18 @@ void Scheduler::priorityIn(tListEntry **list, const ccSchedulerFunc& callback, v
 
     // update hash entry for quick access
     tHashUpdateEntry *hashElement = (tHashUpdateEntry *)calloc(sizeof(*hashElement), 1);
-    hashElement->target = target;
+	hashElement->hash_key = hash_key;
     hashElement->list = list;
     hashElement->entry = listElement;
-    HASH_ADD_PTR(_hashForUpdates, target, hashElement);
+	HASH_ADD_PTR(_hashForUpdates, hash_key, hashElement);
 }
 
-void Scheduler::appendIn(_listEntry **list, const ccSchedulerFunc& callback, void *target, bool paused)
+void Scheduler::appendIn(_listEntry **list, const ccSchedulerFunc& callback, void *hash_key, bool paused)
 {
     tListEntry *listElement = new tListEntry();
 
     listElement->callback = callback;
-	listElement->target = target;
+	listElement->hash_key = hash_key;
 	listElement->priority = 0; //WeiYuemin: when calling appendIn, the priority will always be zero
     listElement->paused = paused;
     listElement->markedForDeletion = false;
@@ -454,71 +449,67 @@ void Scheduler::appendIn(_listEntry **list, const ccSchedulerFunc& callback, voi
 
     // update hash entry for quicker access
     tHashUpdateEntry *hashElement = (tHashUpdateEntry *)calloc(sizeof(*hashElement), 1);
-    hashElement->target = target;
+	hashElement->hash_key = hash_key;
     hashElement->list = list;
     hashElement->entry = listElement;
-    HASH_ADD_PTR(_hashForUpdates, target, hashElement);
+	HASH_ADD_PTR(_hashForUpdates, hash_key, hashElement);
 }
 
-void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void *target, int priority, bool paused)
+void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void *hash_key, int priority, bool paused) //weiyuemin: 这个target其实只是hash_key
 {
     tHashUpdateEntry *hashElement = nullptr;
-    HASH_FIND_PTR(_hashForUpdates, &target, hashElement);
-	if (hashElement && !hashElement->entry->markedForDeletion) //modified by WeiYuemin
-	//如果这个hashElement已经被标记为删除的话，不能算找到了。
-	//就不执行修改，而是直接插入或者append。同样的值再add一遍似乎是不会出错
-	//但不在find里改有个隐患：hash里已经有两个一样的了，一个markedForDeletion，一个没有，那么其实应该find到第二个，但有可能find到第一个，结果因为markedForDeletion的缘故就相当于没有找到
-	//看了下，同bucket内，后插入的是在前面的，那么会先遍历到，应该会没问题
-    {
-        // check if priority has changed
-        if ((*hashElement->list)->priority != priority)
-        {
-            if (_updateHashLocked)
-            {
-				CCLOG("warning: you CANNOT change update priority in scheduled function. old_priority: %d, new_priority: %d", (*hashElement->list)->priority, priority);
-                hashElement->entry->markedForDeletion = false;
-                hashElement->entry->paused = paused;
-                return;
-            }
-            else
-            {
-            	// will be added again outside if (hashElement).
-                unscheduleUpdate(target);
-            }
-        }
-        else
-        {
-			CCLOG("reschedule (%x). priority: %d", (long)target, priority);
-            hashElement->entry->markedForDeletion = false;
-            hashElement->entry->paused = paused;
-            return;
-        }
+	HASH_FIND_PTR(_hashForUpdates, &hash_key, hashElement);
+	if (hashElement) 
+	{
+		// check if priority has changed
+		if ((*hashElement->list)->priority != priority)
+		{
+			if (_updateHashLocked)
+			{
+				CCLOG("warning: you CANNOT change update priority in scheduled function. hash_key: %x, old_priority: %d, new_priority: %d", (long)hash_key, (*hashElement->list)->priority, priority);
+				hashElement->entry->markedForDeletion = false;
+				hashElement->entry->paused = paused;
+				return;
+			}
+			else
+			{
+				// will be added again outside if (hashElement).
+				_unscheduleUpdate(hash_key);
+			}
+		}
+		else
+		{
+			CCLOG("warning: reschedule (%x) with same priority: %d", (long)hash_key, priority);
+			hashElement->entry->markedForDeletion = false;
+			hashElement->entry->paused = paused;
+			return;
+		}
     }
 
     // most of the updates are going to be 0, that's way there
     // is an special list for updates with priority 0
     if (priority == 0)
     {
-        appendIn(&_updates0List, callback, target, paused);
+		appendIn(&_updates0List, callback, hash_key, paused);
     }
     else if (priority < 0)
     {
-        priorityIn(&_updatesNegList, callback, target, priority, paused);
+		priorityIn(&_updatesNegList, callback, hash_key, priority, paused);
     }
     else
     {
         // priority > 0
-        priorityIn(&_updatesPosList, callback, target, priority, paused);
+		priorityIn(&_updatesPosList, callback, hash_key, priority, paused);
     }
 }
 
-bool Scheduler::isScheduled(const std::string& key, void *target)
+bool Scheduler::_isScheduled(const std::string& key, void *hash_key)
 {
     CCASSERT(!key.empty(), "Argument key must not be empty");
-    CCASSERT(target, "Argument target must be non-nullptr");
+	CCASSERT(hash_key, "Argument hash_key must be non-nullptr");
     
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
     
     if (!element)
     {
@@ -551,7 +542,7 @@ void Scheduler::removeUpdateFromHash(struct _listEntry *entry)
 {
     tHashUpdateEntry *element = nullptr;
 
-    HASH_FIND_PTR(_hashForUpdates, &entry->target, element);
+	HASH_FIND_PTR(_hashForUpdates, &entry->hash_key, element);
     if (element)
     {
         // list entry
@@ -564,28 +555,33 @@ void Scheduler::removeUpdateFromHash(struct _listEntry *entry)
     }
 }
 
-void Scheduler::unscheduleUpdate(void *target)
+void Scheduler::_unscheduleUpdate(void *hash_key)
 {
-    if (target == nullptr)
+	if (hash_key == nullptr)
     {
         return;
     }
 
     tHashUpdateEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForUpdates, &target, element);
+	HASH_FIND_PTR(_hashForUpdates, &hash_key, element);
     if (element)
     {
         if (_updateHashLocked)
         {
-			//CCLOG("unscheduleUpdate [%x] but hash locked", (long)target);
+			//CCLOG("unscheduleUpdate [%x] but hash locked", (long)hash_key);
             element->entry->markedForDeletion = true;
         }
         else
         {
-			//CCLOG("unscheduleUpdate [%x] and remove from hash", (long)target);
+			//CCLOG("unscheduleUpdate [%x] and remove from hash", (long)hash_key);
             this->removeUpdateFromHash(element->entry);
         }
     }
+	else
+	{
+		//add by weiyuemin
+		//CCLOG("warning: unschedule but hash element not found. hash_key: [%x]", (long)hash_key);
+	}
 }
 
 void Scheduler::unscheduleAll(void)
@@ -602,7 +598,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
     {
         // element may be removed in unscheduleAllSelectorsForTarget
         nextElement = (tHashTimerEntry *)element->hh.next;
-        unscheduleAllForTarget(element->target);
+		_unscheduleAllForTarget(element->hash_key);
 
         element = nextElement;
     }
@@ -615,7 +611,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
         {
             if(entry->priority >= minPriority)
             {
-                unscheduleUpdate(entry->target);
+				_unscheduleUpdate(entry->hash_key);
             }
         }
     }
@@ -624,7 +620,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
     {
         DL_FOREACH_SAFE(_updates0List, entry, tmp)
         {
-            unscheduleUpdate(entry->target);
+			_unscheduleUpdate(entry->hash_key);
         }
     }
 
@@ -632,7 +628,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
     {
         if(entry->priority >= minPriority)
         {
-            unscheduleUpdate(entry->target);
+			_unscheduleUpdate(entry->hash_key);
         }
     }
 #if CC_ENABLE_SCRIPT_BINDING
@@ -640,17 +636,17 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
 #endif
 }
 
-void Scheduler::unscheduleAllForTarget(void *target)
+void Scheduler::_unscheduleAllForTarget(void *hash_key)
 {
     // explicit nullptr handling
-    if (target == nullptr)
+	if (hash_key == nullptr)
     {
         return;
     }
 
     // Custom Selectors
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
 
     if (element)
     {
@@ -673,7 +669,7 @@ void Scheduler::unscheduleAllForTarget(void *target)
     }
 
     // update selector
-    unscheduleUpdate(target);
+	_unscheduleUpdate(hash_key);
 }
 
 #if CC_ENABLE_SCRIPT_BINDING
@@ -699,13 +695,13 @@ void Scheduler::unscheduleScriptEntry(unsigned int scheduleScriptEntryID)
 
 #endif
 
-void Scheduler::resumeTarget(void *target)
+void Scheduler::_resumeTarget(void *hash_key)
 {
-    CCASSERT(target != nullptr, "");
+	CCASSERT(hash_key != nullptr, "");
 
     // custom selectors
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
     if (element)
     {
         element->paused = false;
@@ -713,7 +709,7 @@ void Scheduler::resumeTarget(void *target)
 
     // update selector
     tHashUpdateEntry *elementUpdate = nullptr;
-    HASH_FIND_PTR(_hashForUpdates, &target, elementUpdate);
+	HASH_FIND_PTR(_hashForUpdates, &hash_key, elementUpdate);
     if (elementUpdate)
     {
         CCASSERT(elementUpdate->entry != nullptr, "");
@@ -721,13 +717,13 @@ void Scheduler::resumeTarget(void *target)
     }
 }
 
-void Scheduler::pauseTarget(void *target)
+void Scheduler::_pauseTarget(void *hash_key)
 {
-    CCASSERT(target != nullptr, "");
+	CCASSERT(hash_key != nullptr, "");
 
     // custom selectors
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
     if (element)
     {
         element->paused = true;
@@ -735,7 +731,7 @@ void Scheduler::pauseTarget(void *target)
 
     // update selector
     tHashUpdateEntry *elementUpdate = nullptr;
-    HASH_FIND_PTR(_hashForUpdates, &target, elementUpdate);
+	HASH_FIND_PTR(_hashForUpdates, &hash_key, elementUpdate);
     if (elementUpdate)
     {
         CCASSERT(elementUpdate->entry != nullptr, "");
@@ -743,13 +739,13 @@ void Scheduler::pauseTarget(void *target)
     }
 }
 
-bool Scheduler::isTargetPaused(void *target)
+bool Scheduler::_isTargetPaused(void *hash_key)
 {
-    CCASSERT( target != nullptr, "target must be non nil" );
+	CCASSERT(hash_key != nullptr, "hash_key must be non nil");
 
     // Custom selectors
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
     if( element )
     {
         return element->paused;
@@ -757,7 +753,7 @@ bool Scheduler::isTargetPaused(void *target)
     
     // We should check update selectors if target does not have custom selectors
 	tHashUpdateEntry *elementUpdate = nullptr;
-	HASH_FIND_PTR(_hashForUpdates, &target, elementUpdate);
+	HASH_FIND_PTR(_hashForUpdates, &hash_key, elementUpdate);
 	if ( elementUpdate )
     {
 		return elementUpdate->entry->paused;
@@ -780,7 +776,7 @@ std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
         element = (tHashTimerEntry*)element->hh.next)
     {
         element->paused = true;
-        idsWithSelectors.insert(element->target);
+		idsWithSelectors.insert(element->hash_key);
     }
 
     // Updates selectors
@@ -792,7 +788,7 @@ std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
             if(entry->priority >= minPriority)
             {
                 entry->paused = true;
-                idsWithSelectors.insert(entry->target);
+				idsWithSelectors.insert(entry->hash_key);
             }
         }
     }
@@ -802,7 +798,7 @@ std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
         DL_FOREACH_SAFE( _updates0List, entry, tmp )
         {
             entry->paused = true;
-            idsWithSelectors.insert(entry->target);
+			idsWithSelectors.insert(entry->hash_key);
         }
     }
 
@@ -811,17 +807,17 @@ std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
         if(entry->priority >= minPriority) 
         {
             entry->paused = true;
-            idsWithSelectors.insert(entry->target);
+			idsWithSelectors.insert(entry->hash_key);
         }
     }
 
     return idsWithSelectors;
 }
 
-void Scheduler::resumeTargets(const std::set<void*>& targetsToResume)
+void Scheduler::resumeTargets(const std::set<void*>& hash_keysToResume)
 {
-    for(const auto &obj : targetsToResume) {
-        this->resumeTarget(obj);
+	for (const auto &hash_key : hash_keysToResume) {
+		_resumeTarget(hash_key);
     }
 }
 
@@ -993,15 +989,17 @@ void Scheduler::schedule(SEL_SCHEDULE selector, Ref *target, float interval, uns
 {
     CCASSERT(target, "Argument target must be non-nullptr");
     
+	void* hash_key = (void*)target->_ID;
+
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
     
     if (! element)
     {
         element = (tHashTimerEntry *)calloc(sizeof(*element), 1);
-        element->target = target;
+		element->hash_key = hash_key;
         
-        HASH_ADD_PTR(_hashForTimers, target, element);
+		HASH_ADD_PTR(_hashForTimers, hash_key, element);
         
         // Is this the 1st element ? Then set the pause level to all the selectors of this target
         element->paused = paused;
@@ -1046,9 +1044,11 @@ bool Scheduler::isScheduled(SEL_SCHEDULE selector, Ref *target)
 {
     CCASSERT(selector, "Argument selector must be non-nullptr");
     CCASSERT(target, "Argument target must be non-nullptr");
+
+	void* hash_key = (void*)target->_ID;
     
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
     
     if (!element)
     {
@@ -1084,12 +1084,14 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Ref *target)
     {
         return;
     }
+
+	void* hash_key = (void*)target->_ID;
     
     //CCASSERT(target);
     //CCASSERT(selector);
     
     tHashTimerEntry *element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);
+	HASH_FIND_PTR(_hashForTimers, &hash_key, element);
     
     if (element)
     {
