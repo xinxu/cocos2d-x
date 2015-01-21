@@ -81,6 +81,7 @@ Sprite* Sprite::create(const std::string& filename)
         return sprite;
     }
     CC_SAFE_DELETE(sprite);
+	cocos2d::log("Sprite::create(%s) failed. check path.", filename.c_str());
     return nullptr;
 }
 
@@ -93,6 +94,7 @@ Sprite* Sprite::create(const std::string& filename, const Rect& rect)
         return sprite;
     }
     CC_SAFE_DELETE(sprite);
+	cocos2d::log("Sprite::create(%s) (with rect) failed. check path.", filename.c_str());
     return nullptr;
 }
 

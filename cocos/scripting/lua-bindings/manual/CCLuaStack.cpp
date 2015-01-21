@@ -285,7 +285,7 @@ int LuaStack::executeGlobalFunction(const char* functionName)
     lua_getglobal(_state, functionName);       /* query function by name, stack: function */
     if (!lua_isfunction(_state, -1))
     {
-        CCLOG("[LUA ERROR] name '%s' does not represent a Lua function", functionName);
+        cocos2d::log("[LUA ERROR] name '%s' does not represent a Lua function", functionName);
         lua_pop(_state, 1);
         return 0;
     }
@@ -398,7 +398,7 @@ bool LuaStack::pushFunctionByHandler(int nHandler)
     toluafix_get_function_by_refid(_state, nHandler);                  /* L: ... func */
     if (!lua_isfunction(_state, -1))
     {
-        CCLOG("[LUA ERROR] function refid '%d' does not reference a Lua function", nHandler);
+		cocos2d::log("[LUA ERROR] function refid '%d' does not reference a Lua function", nHandler);
         lua_pop(_state, 1);
         return false;
     }
@@ -435,7 +435,7 @@ int LuaStack::executeFunction(int numArgs)
     {
         if (traceback == 0)
         {
-            CCLOG("[LUA ERROR] %s", lua_tostring(_state, - 1));        /* L: ... error */
+			cocos2d::log("[LUA ERROR] %s", lua_tostring(_state, -1));        /* L: ... error */
             lua_pop(_state, 1); // remove error message from stack
         }
         else                                                            /* L: ... G error */
@@ -548,7 +548,7 @@ int LuaStack::executeFunctionReturnArray(int handler,int numArgs,int numResults,
         {
             if (traceback == 0)
             {
-                CCLOG("[LUA ERROR] %s", lua_tostring(_state, - 1));        /* L: ... error */
+				cocos2d::log("[LUA ERROR] %s", lua_tostring(_state, -1));        /* L: ... error */
                 lua_pop(_state, 1); // remove error message from stack
             }
             else                                                            /* L: ... G error */
@@ -640,7 +640,7 @@ int LuaStack::executeFunction(int handler, int numArgs, int numResults, const st
         {
             if (traceCallback == 0)
             {
-                CCLOG("[LUA ERROR] %s", lua_tostring(_state, - 1));        /* L: ... error */
+				cocos2d::log("[LUA ERROR] %s", lua_tostring(_state, -1));        /* L: ... error */
                 lua_pop(_state, 1);                                        // remove error message from stack
             }
             else                                                           /* L: ... G error */
@@ -850,19 +850,19 @@ int LuaStack::luaLoadBuffer(lua_State *L, const char *chunk, int chunkSize, cons
         switch (r)
         {
             case LUA_ERRSYNTAX:
-                CCLOG("[LUA ERROR] load \"%s\", error: syntax error during pre-compilation.", chunkName);
+                cocos2d::log("[LUA ERROR] load \"%s\", error: syntax error during pre-compilation.", chunkName);
                 break;
                 
             case LUA_ERRMEM:
-                CCLOG("[LUA ERROR] load \"%s\", error: memory allocation error.", chunkName);
+				cocos2d::log("[LUA ERROR] load \"%s\", error: memory allocation error.", chunkName);
                 break;
                 
             case LUA_ERRFILE:
-                CCLOG("[LUA ERROR] load \"%s\", error: cannot open/read file.", chunkName);
+				cocos2d::log("[LUA ERROR] load \"%s\", error: cannot open/read file.", chunkName);
                 break;
                 
             default:
-                CCLOG("[LUA ERROR] load \"%s\", error: unknown.", chunkName);
+				cocos2d::log("[LUA ERROR] load \"%s\", error: unknown.", chunkName);
         }
     }
 //#endif

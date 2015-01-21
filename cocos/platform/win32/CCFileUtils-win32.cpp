@@ -249,7 +249,7 @@ unsigned char* FileUtilsWin32::getFileData(const std::string& filename, const ch
         snprintf(errorCodeBuffer, sizeof(errorCodeBuffer), "%d", errorCode);
 
         msg = msg + filename + ") failed, error code is " + errorCodeBuffer;
-        CCLOG("%s", msg.c_str());
+        cocos2d::log("%s", msg.c_str()); //用大写的CCLOG release里不会打；至少windows版还是希望打一下
     }
     return pBuffer;
 }

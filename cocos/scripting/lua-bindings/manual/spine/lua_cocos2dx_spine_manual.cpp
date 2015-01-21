@@ -144,6 +144,7 @@ tolua_lerror:
 
 int executeSpineEvent(LuaSkeletonAnimation* skeletonAnimation, int handler, spEventType eventType, int trackIndex , int loopCount = 0, spEvent* event = nullptr )
 {
+	//CCLOG("executeSpineEvent: (%x), handler: %d, eventType: %d, trackIndex: %d", (long)skeletonAnimation, handler, eventType, trackIndex);
     if (nullptr == skeletonAnimation || 0 == handler)
         return 0;
     
