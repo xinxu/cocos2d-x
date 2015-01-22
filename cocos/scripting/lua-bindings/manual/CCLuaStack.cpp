@@ -175,7 +175,7 @@ bool LuaStack::init(void)
 
     // Register our version of the global "print" function
     const luaL_reg global_functions [] = {
-        {"print", lua_print},
+		{ "print", lua_release_print },
         {"release_print",lua_release_print},
         {nullptr, nullptr}
     };
