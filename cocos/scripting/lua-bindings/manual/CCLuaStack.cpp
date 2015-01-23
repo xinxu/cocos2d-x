@@ -91,7 +91,7 @@ int lua_print(lua_State * luastate)
                 t += lua_typename(luastate, lua_type(luastate, i));
         }
         if (i!=nargs)
-            t += "\t";
+            t += " ";
     }
     CCLOG("[LUA-print] %s", t.c_str());
 
@@ -133,7 +133,7 @@ int lua_release_print(lua_State * L)
                 t += lua_typename(L, lua_type(L, i));
         }
         if (i!=nargs)
-            t += "\t";
+            t += " ";
     }
     log("[LUA-print] %s", t.c_str());
     
