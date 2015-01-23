@@ -100,7 +100,7 @@ Director* Director::getInstance()
     return s_SharedDirector;
 }
 
-Director::Director()
+Director::Director() : _net(nullptr)
 {
 }
 
@@ -247,8 +247,30 @@ void Director::setGLDefaultValues()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-// Draw the Scene
 void Director::drawScene()
+{
+	if (_net)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			if (_net->tryReceive())
+			{
+				_drawScene();
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+	else
+	{
+		_drawScene();
+	}
+}
+
+// Draw the Scene
+void Director::_drawScene()
 {
     // calculate "global" dt
 //    static int i = 0;

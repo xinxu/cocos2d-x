@@ -2529,6 +2529,9 @@
     <ClInclude Include="CCLight.h">
       <Filter>2d</Filter>
     </ClInclude>
+    <ClInclude Include="..\base\NetworkInterface.h">
+      <Filter>base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\math\Mat4.inl">

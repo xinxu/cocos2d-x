@@ -38,6 +38,8 @@ THE SOFTWARE.
 #include "platform/CCGL.h"
 #include "platform/CCGLView.h"
 
+#include "NetworkInterface.h"
+
 NS_CC_BEGIN
 
 /**
@@ -317,7 +319,15 @@ public:
     /** Draw the scene.
     This method is called every frame. Don't call it manually.
     */
-    void drawScene();
+    void _drawScene();
+
+	void drawScene(); //weiyuemin: integreted with network module. may call zero to serveral _drawScene() per frame
+
+	//add by weiyuemin
+	inline void setNetworkInterface(class NetworkInterface* net)
+	{
+		_net = net;
+	}
 
     // Memory Helper
 
@@ -505,6 +515,8 @@ protected:
 
     // GLView will recreate stats labels to fit visible rect
     friend class GLView;
+
+	NetworkInterface* _net;
 };
 
 /** 
