@@ -100,7 +100,7 @@ Director* Director::getInstance()
     return s_SharedDirector;
 }
 
-Director::Director() : _net(nullptr)
+Director::Director() : _net(nullptr), _battle_irrelevant_update(nullptr)
 {
 }
 
@@ -249,28 +249,39 @@ void Director::setGLDefaultValues()
 
 void Director::drawScene()
 {
+	if (_battle_irrelevant_update)
+	{
+		_battle_irrelevant_update(_animationInterval);
+	}
+
 	if (_net)
 	{
+		bool drawn = false;
 		for (int i = 0; i < 5; i++)
 		{
 			if (_net->tryReceive())
 			{
-				_drawScene();
+				_drawScene(true);
+				drawn = true;
 			}
 			else
 			{
 				break;
 			}
 		}
+		if (!drawn)
+		{
+			_drawScene(false);
+		}
 	}
 	else
 	{
-		_drawScene();
+		_drawScene(true);
 	}
 }
 
 // Draw the Scene
-void Director::_drawScene()
+void Director::_drawScene(bool enable_update)
 {
     // calculate "global" dt
 //    static int i = 0;
@@ -295,7 +306,7 @@ void Director::_drawScene()
     }
 
     //tick before glClear: issue #533
-    if (! _paused)
+	if (!_paused && enable_update)
     {
         //Statistics::getInstance()->start();
         _scheduler->update(_deltaTime);

@@ -319,9 +319,14 @@ public:
     /** Draw the scene.
     This method is called every frame. Don't call it manually.
     */
-    void _drawScene();
+	void _drawScene(bool enable_update);
 
 	void drawScene(); //weiyuemin: integreted with network module. may call zero to serveral _drawScene() per frame
+
+	void set_battle_irrevelant_update(std::function<void(float)> _update)
+	{
+		_battle_irrelevant_update = _update;
+	}
 
 	//add by weiyuemin
 	inline void setNetworkInterface(class NetworkInterface* net)
@@ -517,6 +522,8 @@ protected:
     friend class GLView;
 
 	NetworkInterface* _net;
+
+	std::function<void(float)> _battle_irrelevant_update;
 };
 
 /** 
