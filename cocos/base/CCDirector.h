@@ -323,7 +323,7 @@ public:
 
 	void drawScene(); //weiyuemin: integreted with network module. may call zero to serveral _drawScene() per frame
 
-	void set_battle_irrevelant_update(std::function<void(float)> _update)
+	void set_battle_irrelevant_update(std::function<void(float)> _update)
 	{
 		_battle_irrelevant_update = _update;
 	}
