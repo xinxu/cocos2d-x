@@ -439,7 +439,10 @@ static int lua_cocos2dx_spine_SkeletonAnimation_setAnimation(lua_State* tolua_S)
         if(!ok)
             return 0;
         
-        cobj->setAnimation(arg0, arg1, arg2);
+        if( cobj->setAnimation(arg0, arg1, arg2) != 0 ) {
+            lua_pushinteger( tolua_S, (lua_Integer)1 );
+            return 1;
+        }
         
         return 0;
     }
