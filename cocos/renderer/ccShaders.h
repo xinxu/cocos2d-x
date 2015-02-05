@@ -36,6 +36,24 @@ NS_CC_BEGIN
  * @{
  */
 
+extern CC_DLL const GLchar * shader_burn_frag;
+extern CC_DLL const GLchar * shader_burn_vert;
+
+extern CC_DLL const GLchar * shader_ice_frag;
+extern CC_DLL const GLchar * shader_ice_vert;
+
+extern CC_DLL const GLchar * shader_poison_frag;
+extern CC_DLL const GLchar * shader_poison_vert;
+
+extern CC_DLL const GLchar * shader_burn_noMVP_frag;
+extern CC_DLL const GLchar * shader_burn_noMVP_vert;
+
+extern CC_DLL const GLchar * shader_ice_noMVP_frag;
+extern CC_DLL const GLchar * shader_ice_noMVP_vert;
+
+extern CC_DLL const GLchar * shader_poison_noMVP_frag;
+extern CC_DLL const GLchar * shader_poison_noMVP_vert;
+
 extern CC_DLL const GLchar * ccPosition_uColor_frag;
 extern CC_DLL const GLchar * ccPosition_uColor_vert;
 

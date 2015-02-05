@@ -114,6 +114,14 @@ public:
         UNIFORM_MAX,
     };
     
+    static const char* SHADER_NAME_POSITION_TEXTURE_COLOR_ICE;
+    static const char* SHADER_NAME_POSITION_TEXTURE_COLOR_BURN;
+    static const char* SHADER_NAME_POSITION_TEXTURE_COLOR_POISON;
+    
+    static const char* SHADER_NAME_POSITION_TEXTURE_COLOR_ICE_NO_MVP;
+    static const char* SHADER_NAME_POSITION_TEXTURE_COLOR_BURN_NO_MVP;
+    static const char* SHADER_NAME_POSITION_TEXTURE_COLOR_POISON_NO_MVP;
+    
     static const char* SHADER_NAME_POSITION_TEXTURE_COLOR;
     static const char* SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP;
     static const char* SHADER_NAME_POSITION_TEXTURE_ALPHA_TEST;

@@ -2908,6 +2908,18 @@
 		50FCEB9118C72017004AD434 /* WidgetReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetReader.h; sourceTree = "<group>"; };
 		50FCEB9218C72017004AD434 /* WidgetReaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetReaderProtocol.h; sourceTree = "<group>"; };
 		988012221A36C5810096D1EC /* Statistics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Statistics.h; sourceTree = "<group>"; };
+		98CE78671A832544002D0387 /* shader_burn_noMVP.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_burn_noMVP.frag; sourceTree = "<group>"; };
+		98CE78681A832544002D0387 /* shader_burn_noMVP.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_burn_noMVP.vert; sourceTree = "<group>"; };
+		98CE78691A832544002D0387 /* shader_ice_noMVP.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_ice_noMVP.frag; sourceTree = "<group>"; };
+		98CE786A1A832544002D0387 /* shader_ice_noMVP.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_ice_noMVP.vert; sourceTree = "<group>"; };
+		98CE786B1A832544002D0387 /* shader_poison_noMVP.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_poison_noMVP.frag; sourceTree = "<group>"; };
+		98CE786C1A832544002D0387 /* shader_poison_noMVP.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_poison_noMVP.vert; sourceTree = "<group>"; };
+		98CE786D1A8332C2002D0387 /* shader_burn.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_burn.frag; sourceTree = "<group>"; };
+		98CE786E1A8332C2002D0387 /* shader_burn.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_burn.vert; sourceTree = "<group>"; };
+		98CE786F1A8332C2002D0387 /* shader_ice.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_ice.frag; sourceTree = "<group>"; };
+		98CE78701A8332C2002D0387 /* shader_ice.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_ice.vert; sourceTree = "<group>"; };
+		98CE78711A8332C2002D0387 /* shader_poison.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_poison.frag; sourceTree = "<group>"; };
+		98CE78721A8332C2002D0387 /* shader_poison.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader_poison.vert; sourceTree = "<group>"; };
 		98E3B5DE1A73944200B5BEBB /* NetworkInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetworkInterface.h; path = ../base/NetworkInterface.h; sourceTree = "<group>"; };
 		A07A4D641783777C0073F6A7 /* libcocos2d iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcocos2d iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B217703B1977ECB4009EE11B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -4801,6 +4813,18 @@
 		5034CA5D191D591900CE6051 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				98CE786D1A8332C2002D0387 /* shader_burn.frag */,
+				98CE786E1A8332C2002D0387 /* shader_burn.vert */,
+				98CE786F1A8332C2002D0387 /* shader_ice.frag */,
+				98CE78701A8332C2002D0387 /* shader_ice.vert */,
+				98CE78711A8332C2002D0387 /* shader_poison.frag */,
+				98CE78721A8332C2002D0387 /* shader_poison.vert */,
+				98CE78671A832544002D0387 /* shader_burn_noMVP.frag */,
+				98CE78681A832544002D0387 /* shader_burn_noMVP.vert */,
+				98CE78691A832544002D0387 /* shader_ice_noMVP.frag */,
+				98CE786A1A832544002D0387 /* shader_ice_noMVP.vert */,
+				98CE786B1A832544002D0387 /* shader_poison_noMVP.frag */,
+				98CE786C1A832544002D0387 /* shader_poison_noMVP.vert */,
 				B67C624319D4186F00F11FC6 /* ccShader_3D_ColorNormal.frag */,
 				B67C624419D4186F00F11FC6 /* ccShader_3D_ColorNormalTex.frag */,
 				B67C624519D4186F00F11FC6 /* ccShader_3D_PositionNormalTex.vert */,

@@ -35,6 +35,12 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 enum {
+    kShaderType_PositionTextureColor_ice,
+    kShaderType_PositionTextureColor_burn,
+    kShaderType_PositionTextureColor_poison,
+    kShaderType_PositionTextureColor_ice_noMVP,
+    kShaderType_PositionTextureColor_burn_noMVP,
+    kShaderType_PositionTextureColor_poison_noMVP,
     kShaderType_PositionTextureColor,
     kShaderType_PositionTextureColor_noMVP,
     kShaderType_PositionTextureColorAlphaTest,
@@ -117,7 +123,31 @@ void GLProgramCache::loadDefaultGLPrograms()
     GLProgram *p = new (std::nothrow) GLProgram();
     loadDefaultGLProgram(p, kShaderType_PositionTextureColor);
     _programs.insert( std::make_pair( GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR, p ) );
+    
+    p = new (std::nothrow) GLProgram();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_burn);
+    _programs.insert( std::make_pair( GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_BURN, p ) );
+    
+    p = new (std::nothrow) GLProgram();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_ice);
+    _programs.insert( std::make_pair( GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_ICE, p ) );
+    
+    p = new (std::nothrow) GLProgram();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_poison);
+    _programs.insert( std::make_pair( GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_POISON, p ) );
 
+    p = new (std::nothrow) GLProgram();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_burn_noMVP);
+    _programs.insert( std::make_pair( GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_BURN_NO_MVP, p ) );
+    
+    p = new (std::nothrow) GLProgram();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_ice_noMVP);
+    _programs.insert( std::make_pair( GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_ICE_NO_MVP, p ) );
+    
+    p = new (std::nothrow) GLProgram();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_poison_noMVP);
+    _programs.insert( std::make_pair( GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_POISON_NO_MVP, p ) );
+    
     // Position Texture Color without MVP shader
     p = new (std::nothrow) GLProgram();
     loadDefaultGLProgram(p, kShaderType_PositionTextureColor_noMVP);
@@ -231,6 +261,30 @@ void GLProgramCache::reloadDefaultGLPrograms()
     p->reset();
     loadDefaultGLProgram(p, kShaderType_PositionTextureColor);
 
+    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_BURN);
+    p->reset();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_burn);
+    
+    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_ICE);
+    p->reset();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_ice);
+    
+    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_POISON);
+    p->reset();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_poison);
+    
+    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_BURN_NO_MVP);
+    p->reset();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_burn_noMVP);
+    
+    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_ICE_NO_MVP);
+    p->reset();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_ice_noMVP);
+    
+    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_POISON_NO_MVP);
+    p->reset();
+    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_poison_noMVP);
+    
     // Position Texture Color without MVP shader
     p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP);
     p->reset();    
@@ -337,13 +391,30 @@ void GLProgramCache::reloadDefaultGLPrograms()
 void GLProgramCache::loadDefaultGLProgram(GLProgram *p, int type)
 {
     switch (type) {
+        case kShaderType_PositionTextureColor_burn:
+            p->initWithByteArrays( shader_burn_vert , shader_burn_frag );
+            break;
+        case kShaderType_PositionTextureColor_ice:
+            p->initWithByteArrays( shader_ice_vert , shader_ice_frag );
+            break;
+        case kShaderType_PositionTextureColor_poison:
+            p->initWithByteArrays( shader_poison_vert , shader_poison_frag );
+            break;
+        case kShaderType_PositionTextureColor_burn_noMVP:
+            p->initWithByteArrays( shader_burn_noMVP_vert , shader_burn_noMVP_frag );
+            break;
+        case kShaderType_PositionTextureColor_ice_noMVP:
+            p->initWithByteArrays( shader_ice_noMVP_vert , shader_ice_noMVP_frag );
+            break;
+        case kShaderType_PositionTextureColor_poison_noMVP:
+            p->initWithByteArrays( shader_poison_noMVP_vert , shader_poison_noMVP_frag );
+            break;
         case kShaderType_PositionTextureColor:
             p->initWithByteArrays(ccPositionTextureColor_vert, ccPositionTextureColor_frag);
             break;
         case kShaderType_PositionTextureColor_noMVP:
             p->initWithByteArrays(ccPositionTextureColor_noMVP_vert, ccPositionTextureColor_noMVP_frag);
             break;
-
         case kShaderType_PositionTextureColorAlphaTest:
             p->initWithByteArrays(ccPositionTextureColor_vert, ccPositionTextureColorAlphaTest_frag);
             break;
