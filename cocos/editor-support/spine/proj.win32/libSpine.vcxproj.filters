@@ -127,9 +127,6 @@
     <ClCompile Include="..\AttachmentLoader.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Bone.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\BoneData.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -194,6 +191,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\spine-cocos2dx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Bone.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

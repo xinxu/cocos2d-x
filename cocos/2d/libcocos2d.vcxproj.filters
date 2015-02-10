@@ -88,15 +88,6 @@
     <Filter Include="cocosdenshion\Source Files">
       <UniqueIdentifier>{f42ec238-cddc-475a-b343-6d0984cb9681}</UniqueIdentifier>
     </Filter>
-    <Filter Include="network">
-      <UniqueIdentifier>{31338a7d-ebe1-4867-9c17-d3645122a864}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="network\Header Files">
-      <UniqueIdentifier>{5a094fe5-f941-4dd4-a892-28d721162ea7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="network\Source Files">
-      <UniqueIdentifier>{9702eb68-42c9-405a-bc89-a1bd85a40ec7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ui\BaseClasses">
       <UniqueIdentifier>{ad654e6b-96ee-4693-9789-dc4aa1c52e70}</UniqueIdentifier>
     </Filter>
@@ -222,6 +213,15 @@
     </Filter>
     <Filter Include="cocostudio\TimelineAction\trigger">
       <UniqueIdentifier>{0554a5b1-03a1-4d38-87a5-976dbe9a39d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network">
+      <UniqueIdentifier>{31338a7d-ebe1-4867-9c17-d3645122a864}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network\Header Files">
+      <UniqueIdentifier>{5a094fe5-f941-4dd4-a892-28d721162ea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network\Source Files">
+      <UniqueIdentifier>{9702eb68-42c9-405a-bc89-a1bd85a40ec7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2528,9 +2528,6 @@
     </ClInclude>
     <ClInclude Include="CCLight.h">
       <Filter>2d</Filter>
-    </ClInclude>
-    <ClInclude Include="..\base\NetworkInterface.h">
-      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

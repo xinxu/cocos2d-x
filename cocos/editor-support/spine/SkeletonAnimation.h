@@ -58,7 +58,6 @@ public:
 	spTrackEntry* setAnimation (int trackIndex, const std::string& name, bool loop);
 	spTrackEntry* addAnimation (int trackIndex, const std::string& name, bool loop, float delay = 0);
 	spTrackEntry* getCurrent (int trackIndex = 0);
-    std::string currentAnimation();
 	void clearTracks ();
 	void clearTrack (int trackIndex = 0);
 
@@ -71,13 +70,13 @@ public:
 	void setTrackEndListener (spTrackEntry* entry, const EndListener& listener);
 	void setTrackCompleteListener (spTrackEntry* entry, const CompleteListener& listener);
 	void setTrackEventListener (spTrackEntry* entry, const EventListener& listener);
-    
+
 	virtual void onAnimationStateEvent (int trackIndex, spEventType type, spEvent* event, int loopCount);
 	virtual void onTrackEntryEvent (int trackIndex, spEventType type, spEvent* event, int loopCount);
 
 	spAnimationState* getState() const;
 
-protected:
+CC_CONSTRUCTOR_ACCESS:
 	SkeletonAnimation ();
 	SkeletonAnimation (spSkeletonData* skeletonData);
 	SkeletonAnimation (const std::string&skeletonDataFile, spAtlas* atlas, float scale = 1);
@@ -85,6 +84,7 @@ protected:
 	virtual ~SkeletonAnimation ();
 	void initialize ();
 
+protected:
 	spAnimationState* _state;
 
 	bool _ownsAnimationStateData;

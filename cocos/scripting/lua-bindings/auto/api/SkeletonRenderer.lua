@@ -96,4 +96,14 @@
 -- @param self
 -- @return rect_table#rect_table ret (return value: rect_table)
         
+--------------------------------
+-- 
+-- @function [parent=#SkeletonRenderer] onEnter 
+-- @param self
+        
+--------------------------------
+-- 
+-- @function [parent=#SkeletonRenderer] onExit 
+-- @param self
+        
 return nil

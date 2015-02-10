@@ -74,10 +74,4 @@
 -- @function [parent=#SkeletonAnimation] clearTrack 
 -- @param self
         
---------------------------------
--- 
--- @function [parent=#SkeletonAnimation] currentAnimation 
--- @param self
--- @return string#string ret (return value: string)
-        
 return nil
