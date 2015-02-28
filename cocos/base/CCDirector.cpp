@@ -61,7 +61,9 @@ THE SOFTWARE.
 //#include "platform/CCGLViewImpl.h"
 
 //statistics
-//#include "Statistics.h"
+#include "../../../frameworks/runtime-src/Classes/Trace.h"
+
+Trace director_trace;
 
 /**
  Position of the FPS
@@ -159,6 +161,8 @@ bool Director::init(void)
     _renderer = new (std::nothrow) Renderer;
 
     _console = new (std::nothrow) Console;
+    
+    director_trace.beginAccumulate();
 
     return true;
 }
@@ -299,24 +303,27 @@ void Director::_drawScene(bool enable_update)
     {
         return;
     }
+    
+    director_trace.accumulate( "other" );
 
     if (_openGLView)
     {
         _openGLView->pollEvents();
     }
-
+    
+    director_trace.accumulate( "poll events" );
+    
     //tick before glClear: issue #533
 	if (!_paused && enable_update)
     {
-        //Statistics::getInstance()->start();
         _scheduler->update(_deltaTime);
-        //Statistics::getInstance()->end( "update" );
-        
-        //Statistics::getInstance()->start();
+    
+        director_trace.accumulate( "update" );
+    
         _eventDispatcher->dispatchEvent(_eventAfterUpdate);
-        //Statistics::getInstance()->end( "dispatch event after update" );
+        director_trace.accumulate( "dispatch events after update" );
     }
-
+    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     /* to avoid flickr, nextScene MUST be here: after tick and before draw.
@@ -326,6 +333,8 @@ void Director::_drawScene(bool enable_update)
     {
         setNextScene();
     }
+    
+    director_trace.accumulate( "set next scene" );
 
     pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
@@ -333,13 +342,17 @@ void Director::_drawScene(bool enable_update)
     {
         //clear draw stats
         _renderer->clearDrawStats();
+    
+        director_trace.accumulate( "render clear draw stats" );
         
         //render the scene
-        //Statistics::getInstance()->start();
         _runningScene->render(_renderer);
-        //Statistics::getInstance()->end( "render running scene" );
+    
+        director_trace.accumulate( "render scene" );
         
         _eventDispatcher->dispatchEvent(_eventAfterVisit);
+    
+        director_trace.accumulate( "render dispatch event" );
     }
 
     // draw the notifications node
@@ -355,7 +368,11 @@ void Director::_drawScene(bool enable_update)
     
     _renderer->render();
     
+    director_trace.accumulate( "director render" );
+    
     _eventDispatcher->dispatchEvent(_eventAfterDraw);
+    
+    director_trace.accumulate( "dispatch events" );
 
     popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
@@ -1142,6 +1159,10 @@ void Director::showStats()
 
     ++_frames;
 	_accumDt += _real_deltaTime;
+    
+    if( _totalFrames % 30 == 0 ) {
+        director_trace.printStatistics( true );
+    }
     
     if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
     {
